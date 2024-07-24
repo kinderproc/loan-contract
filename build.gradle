@@ -1,0 +1,53 @@
+plugins {
+	id 'java'
+	id 'maven-publish'
+	id 'io.spring.dependency-management' version '1.1.5'
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+dependencyManagement {
+	dependencies {
+		dependency 'org.projectlombok:lombok:1.18.34'
+	}
+}
+
+dependencies {
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			groupId = 'com.algon.loan'
+			artifactId = 'loan-contract'
+			version = "1.0.0"
+			from components.java
+		}
+	}
+	repositories {
+		mavenLocal()
+	}
+}
+
+publishToMavenLocal
